@@ -28,16 +28,16 @@ func init() {
 
 // WRITE YOUR CODE BELOW
 func TestPeopleLenOK(t *testing.T) {
-	
+
 	tests := map[string]struct {
-		arg People
+		arg  People
 		want int
 	}{
-		"nil input": {nil, 0},
-		"zero people" : {make(People, 0), 0},
-		"three people" : {make(People, 3), 3},
+		"nil input":    {nil, 0},
+		"zero people":  {make(People, 0), 0},
+		"three people": {make(People, 3), 3},
 	}
-	
+
 	for tn, tt := range tests {
 		t.Run(tn, func(t *testing.T) {
 			got := tt.arg.Len()
@@ -49,49 +49,49 @@ func TestPeopleLenOK(t *testing.T) {
 }
 
 func TestPeopleLess(t *testing.T) {
-	
+
 	i, j := 0, 1
 
-	tests := map[string]struct{
+	tests := map[string]struct {
 		arg  People
-		want bool		
+		want bool
 	}{
-		"different lastName" : {
+		"different lastName": {
 			People{
 				Person{lastName: "A"},
 				Person{lastName: "Z"},
 			},
 			true,
 		},
-		"different firstName" : {
+		"different firstName": {
 			People{
 				Person{firstName: "Z"},
 				Person{firstName: "A"},
 			},
 			false,
 		},
-		"different birthday" : {
+		"different birthday": {
 			People{
 				Person{birthDay: date},
 				Person{birthDay: date.AddDate(20, 0, 0)},
 			},
 			false,
 		},
-		"same LastName" : {
+		"same LastName": {
 			People{
 				Person{firstName: "A", birthDay: date.AddDate(20, 0, 0)},
 				Person{firstName: "Z", birthDay: date},
 			},
 			true,
 		},
-		"same firstName" : {
+		"same firstName": {
 			People{
 				Person{lastName: "A", birthDay: date},
 				Person{lastName: "Z", birthDay: date.AddDate(20, 0, 0)},
 			},
 			false,
 		},
-		"same birthday" : {
+		"same birthday": {
 			People{
 				Person{firstName: "Z", lastName: "A"},
 				Person{firstName: "A", lastName: "Z"},
@@ -120,12 +120,12 @@ func TestPeopleSwap(t *testing.T) {
 	pi := Person{"Andrej", "Żuławski", date}
 	pj := Person{"小林", "正樹", date.AddDate(20, 0, 0)}
 	tests := map[string]struct {
-		arg arg		
+		arg  arg
 		want People
 	}{
-		"swap person" : {
-			arg: arg{People{pi, pj}, 0,  1},
-			want : People{pj, pi},
+		"swap person": {
+			arg:  arg{People{pi, pj}, 0, 1},
+			want: People{pj, pi},
 		},
 	}
 	for tn, tt := range tests {
@@ -135,21 +135,20 @@ func TestPeopleSwap(t *testing.T) {
 				t.Errorf("want %v but got %v\n", tt.want, tt.arg.People)
 			}
 		})
-	}	
+	}
 }
-
 
 func TestPeopleSort(t *testing.T) {
 
 	p := Person{"Jean-Luc", "Godard", date}
 
 	tests := map[string]struct {
-		arg People
+		arg  People
 		want People
 	}{
-		"identical" : {
-			want: People{p, p, p}, 
-			arg: People{p, p, p},
+		"identical": {
+			want: People{p, p, p},
+			arg:  People{p, p, p},
 		},
 		"different lastName": {
 			want: People{
@@ -165,7 +164,7 @@ func TestPeopleSort(t *testing.T) {
 				Person{lastName: "Lynch"},
 			},
 		},
-		"different firstName" : {
+		"different firstName": {
 			want: People{
 				Person{firstName: "Andrzej"},
 				Person{firstName: "David"},
@@ -176,10 +175,10 @@ func TestPeopleSort(t *testing.T) {
 				Person{firstName: "Stanley"},
 				Person{firstName: "小林"},
 				Person{firstName: "Andrzej"},
-				Person{firstName: "David" },
+				Person{firstName: "David"},
 			},
 		},
-		"different birthday" : {
+		"different birthday": {
 			want: People{
 				Person{birthDay: p.birthDay.AddDate(20, 7, 3)},
 				Person{birthDay: p.birthDay.AddDate(20, 7, 2)},
@@ -206,29 +205,28 @@ func TestPeopleSort(t *testing.T) {
 
 }
 
-
 func TestMatrixNew(t *testing.T) {
-	
+
 	var (
-		atoiStr = "zero and one"
-		_, atoiErr = strconv.Atoi("zero")
+		atoiStr               = "zero and one"
+		_, atoiErr            = strconv.Atoi("zero")
 		_, atoiErrEmptyString = strconv.Atoi("")
-		shapeErr = errors.New("Rows need to be the same length")
+		shapeErr              = errors.New("Rows need to be the same length")
 	)
-	
+
 	type result struct {
-		m *Matrix
+		m   *Matrix
 		err error
 	}
 
 	tests := map[string]struct {
-		arg string
+		arg  string
 		want result
 	}{
-		"ok" : {
-			arg : "1 0 0\n0 1 0\n0 0 1",
+		"ok": {
+			arg: "1 0 0\n0 1 0\n0 0 1",
 			want: result{
-				&Matrix{3, 3, 
+				&Matrix{3, 3,
 					[]int{
 						1, 0, 0,
 						0, 1, 0,
@@ -237,22 +235,22 @@ func TestMatrixNew(t *testing.T) {
 				nil,
 			},
 		},
-		"not square matrix" : {
-			arg : "1\n0 1\n0 0 1\n",
+		"not square matrix": {
+			arg: "1\n0 1\n0 0 1\n",
 			want: result{
 				nil,
 				shapeErr,
 			},
 		},
-		"empty string" : {
-			arg : *new(string),
+		"empty string": {
+			arg: *new(string),
 			want: result{
 				nil,
 				atoiErrEmptyString,
 			},
 		},
-		"want atoi error" : {
-			arg : atoiStr,
+		"want atoi error": {
+			arg: atoiStr,
 			want: result{
 				nil,
 				atoiErr,
@@ -263,8 +261,8 @@ func TestMatrixNew(t *testing.T) {
 	for tn, tt := range tests {
 		t.Run(tn, func(t *testing.T) {
 			m, err := New(tt.arg)
-			if err != nil && err.Error() != tt.want.err.Error(){
-					t.Errorf("err: want %v but got %v", tt.want.err, err)
+			if err != nil && err.Error() != tt.want.err.Error() {
+				t.Errorf("err: want %v but got %v", tt.want.err, err)
 			} else {
 				if m != nil && tt.want.m != nil {
 					if !reflect.DeepEqual(*tt.want.m, *m) {
@@ -276,15 +274,13 @@ func TestMatrixNew(t *testing.T) {
 	}
 }
 
-
-
 func TestMatrixRows(t *testing.T) {
 	tests := map[string]struct {
-		arg Matrix
+		arg  Matrix
 		want [][]int
 	}{
-		"ok" : {
-			Matrix{3, 3, 
+		"ok": {
+			Matrix{3, 3,
 				[]int{
 					1, 0, 0,
 					0, 1, 0,
@@ -294,7 +290,7 @@ func TestMatrixRows(t *testing.T) {
 				{1, 0, 0},
 				{0, 1, 0},
 				{0, 0, 1},
-			},	
+			},
 		},
 	}
 
@@ -304,17 +300,17 @@ func TestMatrixRows(t *testing.T) {
 			if !reflect.DeepEqual(tt.want, got) {
 				t.Errorf("want %v but got %v", tt.want, got)
 			}
-		})		
+		})
 	}
 }
 
 func TestMatrixCols(t *testing.T) {
 	tests := map[string]struct {
-		arg Matrix
+		arg  Matrix
 		want [][]int
 	}{
-		"ok" : {
-			Matrix{3, 3, 
+		"ok": {
+			Matrix{3, 3,
 				[]int{
 					1, 2, 3,
 					4, 5, 6,
@@ -324,7 +320,7 @@ func TestMatrixCols(t *testing.T) {
 				{1, 4, 7},
 				{2, 5, 8},
 				{3, 6, 9},
-			},	
+			},
 		},
 	}
 
@@ -334,26 +330,26 @@ func TestMatrixCols(t *testing.T) {
 			if !reflect.DeepEqual(tt.want, got) {
 				t.Errorf("want %v but got %v", tt.want, got)
 			}
-		})		
+		})
 	}
 }
 
 func TestMatrixSet(t *testing.T) {
-	
+
 	type (
 		arg struct {
-			m Matrix
+			m       Matrix
 			i, j, v int
 		}
 		result struct {
 			flag bool
-			m Matrix
+			m    Matrix
 		}
 	)
 
-	m := Matrix {
+	m := Matrix{
 		3, 3,
-		[]int {
+		[]int{
 			1, 2, 3,
 			4, 5, 6,
 			7, 8, 9,
@@ -364,44 +360,44 @@ func TestMatrixSet(t *testing.T) {
 		data arg
 		want result
 	}{
-		"ok" : {
-			data : arg{m, 0, 1, -1},
-			want : result{
+		"ok": {
+			data: arg{m, 0, 1, -1},
+			want: result{
 				true,
-				Matrix {
+				Matrix{
 					3, 3,
-					[]int {
-					1, -1, 3,
-					4, 5, 6,
-					7, 8, 9,
+					[]int{
+						1, -1, 3,
+						4, 5, 6,
+						7, 8, 9,
 					},
 				},
 			},
 		},
-		"out of bounds 1" : {
-			data : arg{m, 100, 100, -1},
-			want : result{
+		"out of bounds 1": {
+			data: arg{m, 100, 100, -1},
+			want: result{
 				false,
-				Matrix {
+				Matrix{
 					3, 3,
-					[]int {
-					1, -1, 3,
-					4, 5, 6,
-					7, 8, 9,
+					[]int{
+						1, -1, 3,
+						4, 5, 6,
+						7, 8, 9,
 					},
 				},
 			},
 		},
-		"out of bounds 2" : {
-			data : arg{m, -100, -100, -1},
-			want : result{
+		"out of bounds 2": {
+			data: arg{m, -100, -100, -1},
+			want: result{
 				false,
-				Matrix {
+				Matrix{
 					3, 3,
-					[]int {
-					1, -1, 3,
-					4, 5, 6,
-					7, 8, 9,
+					[]int{
+						1, -1, 3,
+						4, 5, 6,
+						7, 8, 9,
 					},
 				},
 			},
